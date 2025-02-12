@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Todo App by Shree Paudel</title>
+    <title>Todo App</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
     <style>
         body {
@@ -56,7 +56,7 @@
 <body>
 
     <div class="container">
-        <h1 class="text-center mb-4">To-do List</h1>
+        <h1 class="text-center mb-4">Todo List</h1>
 
         <!-- Add Todo Form -->
         <div class="mb-4">
@@ -65,7 +65,7 @@
         </div>
 
         <!-- Todo List -->
-        <ul id="todoList" class="list-group"></ul>
+        <ul id="todoList" class="list-group mb-4"></ul>
     </div>
 
     <script>
@@ -74,18 +74,18 @@
         const addTaskBtn = document.getElementById('addTaskBtn');
         const todoList = document.getElementById('todoList');
 
-        // Load tasks from localStorage
+        // Load tasks from localStorage on page load
         let tasks = JSON.parse(localStorage.getItem('tasks')) || [];
 
-        // Display tasks
+        // Display tasks from tasks array
         function displayTasks() {
-            todoList.innerHTML = '';
+            todoList.innerHTML = ''; // Clear the list before adding updated tasks
             tasks.forEach((task, index) => {
                 const li = document.createElement('li');
                 li.classList.add('list-group-item', 'todo-item', task.completed ? 'completed' : '');
                 li.innerHTML = `
                     <span class="task-text">${task.text}</span>
-                    <button class="btn btn-complete btn-sm ms-2" onclick="markComplete(${index})">✓</button>
+                    <button class="btn btn-complete btn-sm ms-2" onclick="toggleComplete(${index})">✓</button>
                     <button class="btn btn-edit btn-sm ms-2" onclick="editTask(${index})">Edit</button>
                     <button class="btn btn-delete btn-sm ms-2" onclick="deleteTask(${index})">Delete</button>
                 `;
@@ -93,44 +93,44 @@
             });
         }
 
-        // Add a task
+        // Add a task (Create)
         function addTask() {
             const taskText = taskInput.value.trim();
             if (taskText !== '') {
                 tasks.push({ text: taskText, completed: false });
-                taskInput.value = '';
-                saveTasks();
-                displayTasks();
+                taskInput.value = ''; // Clear the input field after adding a task
+                saveTasks();           // Save to localStorage
+                displayTasks();        // Update the displayed list
             }
         }
 
-        // Mark a task as complete
-        function markComplete(index) {
+        // Toggle a task as complete or incomplete (Update)
+        function toggleComplete(index) {
             tasks[index].completed = !tasks[index].completed;
-            saveTasks();
-            displayTasks();
+            saveTasks();           // Save to localStorage
+            displayTasks();        // Update the displayed list
         }
 
-        // Edit a task
+        // Edit a task (Update)
         function editTask(index) {
             const newText = prompt('Edit your task:', tasks[index].text);
             if (newText !== null && newText.trim() !== '') {
                 tasks[index].text = newText.trim();
-                saveTasks();
-                displayTasks();
+                saveTasks();           // Save to localStorage
+                displayTasks();        // Update the displayed list
             }
         }
 
-        // Delete a task
+        // Delete a task (Delete)
         function deleteTask(index) {
-            tasks.splice(index, 1);
-            saveTasks();
-            displayTasks();
+            tasks.splice(index, 1); // Remove task from array
+            saveTasks();           // Save to localStorage
+            displayTasks();        // Update the displayed list
         }
 
         // Save tasks to localStorage
         function saveTasks() {
-            localStorage.setItem('tasks', JSON.stringify(tasks));
+            localStorage.setItem('tasks', JSON.stringify(tasks)); // Save updated tasks to localStorage
         }
 
         // Event listeners
@@ -141,7 +141,7 @@
             }
         });
 
-        // Initial call to display tasks
+        // Initial call to display tasks from localStorage
         displayTasks();
     </script>
 
